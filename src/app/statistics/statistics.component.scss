@@ -1,0 +1,21 @@
+.stats {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: auto;
+
+  .item {
+    border: solid;
+    border-radius: 15px;
+    border-width: 1px;
+    border-color: #4da19e;
+    margin: 4px;
+    text-align: center;
+    width: 150px;
+  }
+
+  .number {
+    font-weight: bold;
+    font-size: 20px;
+  }
+}
