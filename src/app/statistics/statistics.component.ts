@@ -10,7 +10,5 @@ export class StatisticsComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit(): void {
-    console.log(this.stats);
-  }
+  ngOnInit(): void {}
 }
