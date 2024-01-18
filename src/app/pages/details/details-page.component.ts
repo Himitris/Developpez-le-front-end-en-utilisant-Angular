@@ -5,6 +5,15 @@ import { OlympicCountry } from 'src/app/core/models/OlympicCountry';
 import { Participation } from 'src/app/core/models/Participation';
 import { OlympicService } from 'src/app/core/services/olympic.service';
 
+interface seriesType {
+  name: string;
+  value: number;
+}
+
+interface DataItem {
+  name: string;
+  series: seriesType[];
+}
 @Component({
   selector: 'app-details-page',
   templateUrl: './details-page.component.html',
@@ -12,7 +21,7 @@ import { OlympicService } from 'src/app/core/services/olympic.service';
 })
 export class DetailsPageComponent implements OnInit {
   currentOlympic$!: Observable<OlympicCountry>;
-  chartData!: any[];
+  chartData!: DataItem[];
   athletesNumber: number = 0;
   medalsNumber: number = 0;
   olympics$!: Observable<OlympicCountry[]>;
@@ -54,7 +63,6 @@ export class DetailsPageComponent implements OnInit {
                   ),
                 },
               ];
-
               this.stats = [
                 {
                   name: 'Number of entry',

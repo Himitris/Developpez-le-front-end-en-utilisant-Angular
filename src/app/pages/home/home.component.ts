@@ -5,6 +5,13 @@ import { Observable, Subject, filter, map, takeUntil } from 'rxjs';
 import { OlympicCountry } from 'src/app/core/models/OlympicCountry';
 import { OlympicService } from 'src/app/core/services/olympic.service';
 
+interface PieCharToolTip {
+  data: {
+    name: string;
+    value: number;
+  };
+}
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -12,7 +19,7 @@ import { OlympicService } from 'src/app/core/services/olympic.service';
 })
 export class HomeComponent implements OnInit {
   public olympics$!: Observable<OlympicCountry[]>;
-  public chartData: any[] = [];
+  public chartData: Object[] = [];
   joNumber: number = 0;
   countriesNumber: number = 0;
   private destroy$!: Subject<boolean>;
@@ -30,7 +37,7 @@ export class HomeComponent implements OnInit {
       )
       .subscribe((data) => {
         this.joNumber = data[0].participations.length;
-        this.chartData = data.map((item: any) => {
+        this.chartData = data.map((item: OlympicCountry) => {
           this.countriesNumber++;
           return {
             name: item.country,
@@ -48,10 +55,20 @@ export class HomeComponent implements OnInit {
       });
   }
 
-  onSelect(data: any): void {
+  onSelect(data: JSON): void {
     this.router.navigateByUrl(
       `details/${JSON.parse(JSON.stringify(data)).name}`
     );
+  }
+
+  customTooltipText(data: PieCharToolTip): string {
+    return `<div class="toolTipText">
+              <div>${data.data.name}</div>
+              <div>
+                <i class="fas fa-medal"></i> 
+                ${data.data.value}
+              </div>
+            </div>`;
   }
 
   ngOnDestroy(): void {

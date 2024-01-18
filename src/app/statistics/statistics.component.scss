@@ -1,17 +1,19 @@
 .stats {
   display: flex;
   flex-direction: row;
+  justify-content: center;
   align-items: center;
-  width: auto;
 
   .item {
     border: solid;
     border-radius: 15px;
-    border-width: 1px;
+    border-width: 2px;
     border-color: #4da19e;
     margin: 4px;
+    padding-left: 15px;
+    padding-right: 15px;
     text-align: center;
-    width: 150px;
+    width: auto;
   }
 
   .number {

@@ -6,9 +6,11 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./statistics.component.scss'],
 })
 export class StatisticsComponent implements OnInit {
-  @Input() stats: any;
+  @Input() stats!: any[];
 
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log(this.stats);
+  }
 }

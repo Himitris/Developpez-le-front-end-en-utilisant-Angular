@@ -10,27 +10,4 @@
     padding: 1%;
     color: white;
   }
-
-  .stats {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    width: 50%;
-    height: auto;
-
-    .item {
-      border: solid;
-      border-radius: 15px;
-      border-width: 1px;
-      border-color: #4da19e;
-      margin: 2%;
-      text-align: center;
-      width: 33%;
-    }
-
-    .number {
-      font-weight: bold;
-      font-size: 20px;
-    }
-  }
 }

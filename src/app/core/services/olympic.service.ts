@@ -35,7 +35,7 @@ export class OlympicService {
 
     if (olympicsData) {
       const foundOlympic = olympicsData.find(
-        (olympic: any) => olympic.country === olympicName
+        (olympic: OlympicCountry) => olympic.country === olympicName
       );
 
       if (foundOlympic) {
