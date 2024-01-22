@@ -1,6 +1,7 @@
 import { OlympicCountry } from '../models/OlympicCountry';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 
@@ -11,17 +12,17 @@ export class OlympicService {
   private olympicUrl = './assets/mock/olympic.json';
   private olympics$ = new BehaviorSubject<any>(undefined);
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   loadInitialData() {
     return this.http.get<OlympicCountry[]>(this.olympicUrl).pipe(
       tap((value) => this.olympics$.next(value)),
-      catchError((error, caught) => {
-        // TODO: improve error handling
+      catchError((error) => {
         console.error(error);
-        // can be useful to end loading state and let the user know something went wrong
         this.olympics$.next(null);
-        return caught;
+        // Redirect to the not-found route in case of an error
+        this.router.navigateByUrl('**');
+        throw new Error(error.status + ' ' + error.statusText);
       })
     );
   }
@@ -34,6 +35,7 @@ export class OlympicService {
     const olympicsData = this.olympics$.value;
 
     if (olympicsData) {
+      // If data is available, find the OlympicCountry by name
       const foundOlympic = olympicsData.find(
         (olympic: OlympicCountry) => olympic.country === olympicName
       );
@@ -44,6 +46,7 @@ export class OlympicService {
         throw new Error('Olympic not found');
       }
     } else {
+      // If data is not available, load the initial data and handle errors
       return this.loadInitialData().pipe(
         switchMap(() => {
           const reloadedData = this.olympics$.value;
@@ -58,7 +61,6 @@ export class OlympicService {
           }
         }),
         catchError((error) => {
-          // Gérer les erreurs ici
           return throwError(() => error);
         })
       );

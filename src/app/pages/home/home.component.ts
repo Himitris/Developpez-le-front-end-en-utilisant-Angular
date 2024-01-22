@@ -20,9 +20,11 @@ interface PieCharToolTip {
 export class HomeComponent implements OnInit {
   public olympics$!: Observable<OlympicCountry[]>;
   public chartData: Object[] = [];
+  // Counters for the number of JOs and countries
   joNumber: number = 0;
   countriesNumber: number = 0;
   private destroy$!: Subject<boolean>;
+  // Array to hold statistical information
   stats: Object[] = [];
 
   constructor(private olympicService: OlympicService, private router: Router) {}
@@ -30,12 +32,15 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.destroy$ = new Subject<boolean>();
     this.olympics$ = this.olympicService.getOlympics();
+    // Subscribe to the Olympic data and perform actions based on the existence of the country
     this.olympics$
       .pipe(
+        // Filter data to ensure it's not null or empty
         filter((data) => data && data.length > 0),
         takeUntil(this.destroy$)
       )
       .subscribe((data) => {
+        // Update counters and chartData based on Olympic data
         this.joNumber = data[0].participations.length;
         this.chartData = data.map((item: OlympicCountry) => {
           this.countriesNumber++;
@@ -48,6 +53,7 @@ export class HomeComponent implements OnInit {
             ),
           };
         });
+        // Update stats array with statistical information
         this.stats = [
           { name: "Number of JO's", value: this.joNumber },
           { name: 'Number of countries', value: this.countriesNumber },
@@ -55,12 +61,14 @@ export class HomeComponent implements OnInit {
       });
   }
 
+  // Method to navigate to details page when a chart item is selected
   onSelect(data: JSON): void {
     this.router.navigateByUrl(
       `details/${JSON.parse(JSON.stringify(data)).name}`
     );
   }
 
+  // Method to customize tooltip text for the PieChart
   customTooltipText(data: PieCharToolTip): string {
     return `<div class="toolTipText">
               <div>${data.data.name}</div>
@@ -71,6 +79,7 @@ export class HomeComponent implements OnInit {
             </div>`;
   }
 
+  // Lifecycle hook to handle component destruction and prevent memory leaks
   ngOnDestroy(): void {
     this.destroy$.next(true);
   }

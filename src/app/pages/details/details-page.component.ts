@@ -21,11 +21,14 @@ interface DataItem {
 })
 export class DetailsPageComponent implements OnInit {
   currentOlympic$!: Observable<OlympicCountry>;
+  // Array to hold data for chart visualization
   chartData!: DataItem[];
+  // Counters for athletes and medals
   athletesNumber: number = 0;
   medalsNumber: number = 0;
   olympics$!: Observable<OlympicCountry[]>;
   private destroy$!: Subject<boolean>;
+  // Array to hold statistical information
   stats: Object[] = [];
 
   constructor(
@@ -39,12 +42,14 @@ export class DetailsPageComponent implements OnInit {
     const name = this.route.snapshot.params['name'];
     try {
       this.olympics$ = this.olympicService.getOlympics();
-      //TODO: check if name is in olympics$ array and if not, redirect to home page
+      // Subscribe to the Olympic data and perform actions based on the existence of the country
       this.olympics$.pipe(takeUntil(this.destroy$)).subscribe((data) => {
         if (!data.find((item) => item.country === name)) {
+          // Redirect to a default route if the country is not found
           this.router.navigateByUrl('**');
         } else {
           this.currentOlympic$ = this.olympicService.getOlympicsByName(name);
+          // Subscribe to the current OlympicCountry data and update chartData and stats
           this.currentOlympic$
             .pipe(takeUntil(this.destroy$))
             .subscribe((data) => {
@@ -53,6 +58,7 @@ export class DetailsPageComponent implements OnInit {
                   name: data.country,
                   series: data.participations.map(
                     (participation: Participation) => {
+                      // Update stats number and return series data ready for chart
                       this.athletesNumber += participation.athleteCount;
                       this.medalsNumber += participation.medalsCount;
                       return {
@@ -63,6 +69,7 @@ export class DetailsPageComponent implements OnInit {
                   ),
                 },
               ];
+              // Update stats array with statistical information
               this.stats = [
                 {
                   name: 'Number of entry',
@@ -79,10 +86,11 @@ export class DetailsPageComponent implements OnInit {
       });
     } catch (error) {
       console.error(error);
-      // Gérez l'erreur ici, par exemple, redirigez l'utilisateur vers une page d'erreur ou affichez un message d'erreur à l'utilisateur.
+      this.router.navigateByUrl('**');
     }
   }
 
+  // Lifecycle hook to handle component destruction and prevent memory leaks
   ngOnDestroy(): void {
     this.destroy$.next(true);
   }
