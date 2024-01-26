@@ -2,11 +2,24 @@
   <h1>Medals per Country</h1>
   <app-statistics [stats]="stats"></app-statistics>
   <ngx-charts-pie-chart
-    [view]="[700, 300]"
+    (window:resize)="onResize($event)"
+    [view]="chartSize"
     [results]="chartData"
     [labels]="true"
-    [tooltipText]="customTooltipText"
     (select)="onSelect($event)"
   >
+    <ng-template #tooltipTemplate let-model="model">
+      <div
+        style="
+          background-color: #4da19e;
+          padding: 1px 20px 12px 20px;
+          margin: 0px -10px 0px -10px;
+          border-radius: 2px;
+        "
+      >
+        <p>{{ model.name }}</p>
+        <i class="fas fa-medal"> {{ model.value }}</i>
+      </div>
+    </ng-template>
   </ngx-charts-pie-chart>
 </div>

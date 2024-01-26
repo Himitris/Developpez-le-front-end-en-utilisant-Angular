@@ -14,10 +14,24 @@
     padding-right: 15px;
     text-align: center;
     width: auto;
+    font-size: 23px;
   }
 
   .number {
     font-weight: bold;
     font-size: 20px;
+  }
+}
+
+@media (max-width: 735px) {
+  .stats {
+    flex-direction: column;
+    .item {
+      width: 310px;
+      height: 90px;
+      font-size: 17px;
+      padding-left: 0px;
+      padding-right: 0px;
+    }
   }
 }

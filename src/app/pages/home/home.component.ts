@@ -5,13 +5,6 @@ import { Observable, Subject, filter, map, takeUntil } from 'rxjs';
 import { OlympicCountry } from 'src/app/core/models/OlympicCountry';
 import { OlympicService } from 'src/app/core/services/olympic.service';
 
-interface PieCharToolTip {
-  data: {
-    name: string;
-    value: number;
-  };
-}
-
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -20,6 +13,7 @@ interface PieCharToolTip {
 export class HomeComponent implements OnInit {
   public olympics$!: Observable<OlympicCountry[]>;
   public chartData: Object[] = [];
+  chartSize!: [number, number];
   // Counters for the number of JOs and countries
   joNumber: number = 0;
   countriesNumber: number = 0;
@@ -31,6 +25,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.destroy$ = new Subject<boolean>();
+    this.chartSize = [innerWidth / 1.1, 400];
     this.olympics$ = this.olympicService.getOlympics();
     // Subscribe to the Olympic data and perform actions based on the existence of the country
     this.olympics$
@@ -68,15 +63,8 @@ export class HomeComponent implements OnInit {
     );
   }
 
-  // Method to customize tooltip text for the PieChart
-  customTooltipText(data: PieCharToolTip): string {
-    return `<div class="toolTipText">
-              <div>${data.data.name}</div>
-              <div>
-                <i class="fas fa-medal"></i> 
-                ${data.data.value}
-              </div>
-            </div>`;
+  onResize(event: any) {
+    this.chartSize = [event.target.innerWidth / 1.1, 400];
   }
 
   // Lifecycle hook to handle component destruction and prevent memory leaks

@@ -8,7 +8,7 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { DetailsPageComponent } from './pages/details/details-page.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { StatisticsComponent } from './statistics/statistics.component';
+import { StatisticsComponent } from './pages/statistics/statistics.component';
 
 @NgModule({
   declarations: [

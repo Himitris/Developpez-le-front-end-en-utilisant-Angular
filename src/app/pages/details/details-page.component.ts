@@ -23,6 +23,7 @@ export class DetailsPageComponent implements OnInit {
   currentOlympic$!: Observable<OlympicCountry>;
   // Array to hold data for chart visualization
   chartData!: DataItem[];
+  chartSize!: [number, number];
   // Counters for athletes and medals
   athletesNumber: number = 0;
   medalsNumber: number = 0;
@@ -39,6 +40,7 @@ export class DetailsPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.destroy$ = new Subject<boolean>();
+    this.setChartSize(innerWidth);
     const name = this.route.snapshot.params['name'];
     try {
       this.olympics$ = this.olympicService.getOlympics();
@@ -88,6 +90,19 @@ export class DetailsPageComponent implements OnInit {
       console.error(error);
       this.router.navigateByUrl('**');
     }
+  }
+
+  setChartSize(innerWidth: number) {
+    this.chartSize =
+      innerWidth > 1050
+        ? [innerWidth / 1.4, 400]
+        : innerWidth > 425
+        ? [innerWidth / 1.2, 300]
+        : [innerWidth, 250];
+  }
+
+  onResize(event: any) {
+    this.setChartSize(event.target.innerWidth);
   }
 
   // Lifecycle hook to handle component destruction and prevent memory leaks
